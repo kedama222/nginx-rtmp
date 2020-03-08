@@ -19,11 +19,14 @@ RUN apk add --no-cache --virtual .build \
       --with-cc-opt="-Wimplicit-fallthrough=0" \
  && nice make -j$(nproc) \
  && make install \
+ && cp ../nginx-rtmp-module-1.2.1/stat.xsl /usr/local/nginx/html/ \
  && ln -s /dev/stdout /usr/local/nginx/logs/access.log \
  && ln -s /dev/stderr /usr/local/nginx/logs/error.log \
  && cd /root \
  && rm -fr * \
  && apk del .build
+
+COPY nginx.conf /usr/local/nginx/conf/
 
 CMD ["/usr/local/nginx/sbin/nginx","-g","daemon off;"]
 EXPOSE 80 1935
